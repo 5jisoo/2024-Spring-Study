@@ -15,16 +15,40 @@ public class JpaMain {
         tx.begin();
 
         try {
-            final Member findMember1 = em.find(Member.class, 100L); // SELECT
-            findMember1.setName("100L Member");
+            final Member member1 = new Member();
+            member1.setUsername("A");
 
-            em.clear();
+            final Member member2 = new Member();
+            member1.setUsername("B");
 
-            final Member findMember2 = em.find(Member.class, 100L); // SELECT => 다시 엔티티 등록
+            final Member member3 = new Member();
+            member1.setUsername("C");
 
-            System.out.println("===============");
-            tx.commit(); // UPDATE 쿼리가 나감
+            final Member member4 = new Member();
+            member1.setUsername("D");
+
+            final Member member5 = new Member();
+            member1.setUsername("E");
+
+            System.out.println("==================");
+
+            em.persist(member1);
+            em.persist(member2);
+            em.persist(member3);
+            em.persist(member4);
+            em.persist(member5);
+
+            System.out.println("member1.id = " + member1.getId());
+            System.out.println("member2.id = " + member2.getId());
+            System.out.println("member3.id = " + member3.getId());
+            System.out.println("member4.id = " + member4.getId());
+            System.out.println("member5.id = " + member5.getId());
+
+            System.out.println("==================");
+
+            tx.commit();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             tx.rollback();
         } finally {
             em.close();
