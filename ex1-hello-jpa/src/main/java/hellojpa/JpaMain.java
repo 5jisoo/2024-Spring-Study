@@ -24,22 +24,22 @@ public class JpaMain {
 
             final Member member = new Member();
             member.setName("member1");
-            member.setTeam(team);
+            member.changeTeam(team);
             em.persist(member);
 
-            em.flush();
-            em.clear();
+            team.getMembers().add(member); // 양방향 연관관계 등록 - 이게 없다고 DB에 등록이 안되진 않음.
 
-            System.out.println("=========================");
-            final Member findMember = em.find(Member.class, member.getId());
-            System.out.println("=========================");
-            final List<Member> members = findMember.getTeam().getMembers();
-            System.out.println("=========================");
+//            em.flush();
+//            em.clear();
 
+            final Team findTeam = em.find(Team.class, team.getId());
+            final List<Member> members = findTeam.getMembers();
+
+            System.out.println("================");
             for (Member m : members) {
                 System.out.println("m.getName() = " + m.getName());
             }
-            System.out.println("=========================");
+            System.out.println("================");
 
             tx.commit();
         } catch (Exception e) {
