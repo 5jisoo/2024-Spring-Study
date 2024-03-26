@@ -4,6 +4,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import jdk.swing.interop.SwingInterOpUtils;
+
+import java.util.List;
 
 public class JpaMain {
 
@@ -15,7 +18,6 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // save
             final Team team = new Team();
             team.setName("TeamA");
             em.persist(team);
@@ -25,9 +27,19 @@ public class JpaMain {
             member.setTeam(team);
             em.persist(member);
 
+            em.flush();
+            em.clear();
+
+            System.out.println("=========================");
             final Member findMember = em.find(Member.class, member.getId());
-            final Team findTeam = findMember.getTeam();
-            System.out.println("findTeam = " + findTeam.getName());
+            System.out.println("=========================");
+            final List<Member> members = findMember.getTeam().getMembers();
+            System.out.println("=========================");
+
+            for (Member m : members) {
+                System.out.println("m.getName() = " + m.getName());
+            }
+            System.out.println("=========================");
 
             tx.commit();
         } catch (Exception e) {
