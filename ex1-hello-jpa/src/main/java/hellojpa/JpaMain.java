@@ -23,7 +23,6 @@ public class JpaMain {
             member.setName("member1");
             member.changeTeam(team);
             em.persist(member);
-
             team.getMembers().add(member);
 
             tx.commit();
