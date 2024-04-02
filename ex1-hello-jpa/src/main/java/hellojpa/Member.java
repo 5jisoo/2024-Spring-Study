@@ -3,7 +3,7 @@ package hellojpa;
 import jakarta.persistence.*;
 
 @Entity
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "MEMBER_ID")
@@ -11,9 +11,6 @@ public class Member {
 
     @Column(name = "USERNAME")
     private String name;
-
-//    @Column(name = "TEAM_ID")
-//    private Long teamId;
 
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
