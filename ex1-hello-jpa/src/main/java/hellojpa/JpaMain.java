@@ -5,8 +5,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
-import java.util.List;
-
 public class JpaMain {
 
     public static void main(String[] args) {
@@ -26,19 +24,7 @@ public class JpaMain {
             member.changeTeam(team);
             em.persist(member);
 
-            team.getMembers().add(member); // 양방향 연관관계 등록 - 이게 없다고 DB에 등록이 안되진 않음.
-
-//            em.flush();
-//            em.clear();
-
-            final Team findTeam = em.find(Team.class, team.getId());
-            final List<Member> members = findTeam.getMembers();
-
-            System.out.println("================");
-            for (Member m : members) {
-                System.out.println("m.getName() = " + m.getName());
-            }
-            System.out.println("================");
+            team.getMembers().add(member);
 
             tx.commit();
         } catch (Exception e) {
