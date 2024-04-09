@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ORDERS") // prevent SQL DB reserved words issue
-public class Order {
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue
