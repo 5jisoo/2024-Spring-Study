@@ -18,18 +18,10 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("userA");
-            Address address = new Address("cityA", "streetA", "1111");
-            member.setHomeAddress(address);
-            member.setWorkPeriod(new Period());
-            em.persist(member);
+            Address address1 = new Address("cityA", "streetA", "1111");
+            Address address2 = new Address("cityA", "streetA", "1111");
 
-            Member member2 = new Member();
-            member2.setHomeAddress(address);
-            em.persist(member2);
-
-//            address.setCity("newCity");
+            System.out.println("address1.equals(address2) = " + address1.equals(address2));
 
             tx.commit();
         } catch (Exception e) {
