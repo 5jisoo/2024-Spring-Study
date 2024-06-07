@@ -3,7 +3,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jpql.Member;
-import jpql.MemberDTO;
 
 import java.util.List;
 
@@ -17,31 +16,27 @@ public class Main {
 
         try {
 
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setAge(20);
-
-            em.persist(member);
+            for (int i = 0; i < 100; i++) {
+                Member member = new Member();
+                member.setUsername("member" + i);
+                member.setAge(i);
+                em.persist(member);
+            }
 
             em.flush();
             em.clear();
 
             System.out.println("================");
 
-//            List<Object[]> resultList = em.createQuery("SELECT m.username, m.age FROM Member m")
-//                    .getResultList();
-//
-//            Object[] result = resultList.get(0);
-//            System.out.println("username = " + result[0]);
-//            System.out.println("age = " + result[1]);
-
-            List<MemberDTO> resultList = em
-                    .createQuery("SELECT new jpql.MemberDTO(m.username, m.age) FROM Member m", MemberDTO.class)
+            List<Member> result = em.createQuery("select m from Member m order by m.age", Member.class)
+                    .setFirstResult(1)
+                    .setMaxResults(10)
                     .getResultList();
 
-            MemberDTO memberDTO = resultList.get(0);
-            System.out.println("memberDTO.getUsername() = " + memberDTO.getUsername());
-            System.out.println("memberDTO.getAge() = " + memberDTO.getAge());
+            System.out.println("result.size() = " + result.size());
+            for (Member resultMember : result) {
+                System.out.println("resultMember = " + resultMember);
+            }
 
             tx.commit();
         } catch (Exception e) {
