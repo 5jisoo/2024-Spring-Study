@@ -31,10 +31,20 @@ public class Main {
 
             System.out.println("================");
 
-            String query = "select m from Member m join m.team t";
+            String query = "select " +
+                    "case " +
+                    "   when m.age <= 10 then '학생 요금' " +
+                    "   when m.age >= 60 then '경로 요금' " +
+                    "   else '일반 요금' " +
+                    "end " +
+                    "from Member m ";
 
-            List<Member> result = em.createQuery(query, Member.class)
+            List<String> result = em.createQuery(query, String.class)
                     .getResultList();
+
+            for (String s : result) {
+                System.out.println("s = " + s);
+            }
 
             tx.commit();
         } catch (Exception e) {
