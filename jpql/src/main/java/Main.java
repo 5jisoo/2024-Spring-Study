@@ -3,6 +3,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jpql.Member;
+import jpql.Team;
 
 import java.util.List;
 
@@ -15,28 +16,25 @@ public class Main {
         tx.begin();
 
         try {
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
 
-            for (int i = 0; i < 100; i++) {
-                Member member = new Member();
-                member.setUsername("member" + i);
-                member.setAge(i);
-                em.persist(member);
-            }
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setAge(20);
+            member.changeTeam(team);
+            em.persist(member);
 
             em.flush();
             em.clear();
 
             System.out.println("================");
 
-            List<Member> result = em.createQuery("select m from Member m order by m.age", Member.class)
-                    .setFirstResult(1)
-                    .setMaxResults(10)
-                    .getResultList();
+            String query = "select m from Member m join m.team t";
 
-            System.out.println("result.size() = " + result.size());
-            for (Member resultMember : result) {
-                System.out.println("resultMember = " + resultMember);
-            }
+            List<Member> result = em.createQuery(query, Member.class)
+                    .getResultList();
 
             tx.commit();
         } catch (Exception e) {
