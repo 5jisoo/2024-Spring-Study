@@ -16,34 +16,47 @@ public class Main {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
+            Team team1 = new Team();
+            team1.setName("teamA");
+            em.persist(team1);
 
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setAge(20);
-            member.changeTeam(team);
-            em.persist(member);
+            Team team2 = new Team();
+            team2.setName("teamB");
+            em.persist(team2);
+
+            Member member1 = new Member();
+            member1.setUsername("회원1");
+            member1.changeTeam(team1);
+            em.persist(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("회원2");
+            member2.changeTeam(team2);
+            em.persist(member2);
+
+            Member member3 = new Member();
+            member3.setUsername("회원3");
+            member3.changeTeam(team2);
+            em.persist(member3);
 
             em.flush();
             em.clear();
 
             System.out.println("================");
 
-            String query = "select " +
-                    "case " +
-                    "   when m.age <= 10 then '학생 요금' " +
-                    "   when m.age >= 60 then '경로 요금' " +
-                    "   else '일반 요금' " +
-                    "end " +
-                    "from Member m ";
+//            String query = "select t from Team t join fetch t.memberList as m";
+            String query = "select t from Team t";
 
-            List<String> result = em.createQuery(query, String.class)
+            List<Team> result = em.createQuery(query, Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(2)
                     .getResultList();
 
-            for (String s : result) {
-                System.out.println("s = " + s);
+            for (Team t : result) {
+                System.out.println("t.getName() = " + t.getName() + " | members = " + t.getMemberList().size());
+                for (Member member : t.getMemberList()) {
+                    System.out.println(" -> member = " + member);
+                }
             }
 
             tx.commit();
