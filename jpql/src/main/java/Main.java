@@ -42,21 +42,12 @@ public class Main {
             em.flush();
             em.clear();
 
-            System.out.println("================");
-
-//            String query = "select t from Team t join fetch t.memberList as m";
-            String query = "select t from Team t";
-
-            List<Team> result = em.createQuery(query, Team.class)
-                    .setFirstResult(0)
-                    .setMaxResults(2)
+            List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
+                    .setParameter("username", "회원1")
                     .getResultList();
 
-            for (Team t : result) {
-                System.out.println("t.getName() = " + t.getName() + " | members = " + t.getMemberList().size());
-                for (Member member : t.getMemberList()) {
-                    System.out.println(" -> member = " + member);
-                }
+            for (Member member : resultList) {
+                System.out.println("member = " + member);
             }
 
             tx.commit();
